@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML | Welcome</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --accent: #fd79a8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 800px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(to right, #fff, #a29bfe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            color: var(--accent);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-element {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-1000px) rotate(720deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements" id="floatingElements"></div>
+
+    <div class="container">
+        <h1>Welcome to ML Films</h1>
+        <h2>Your ultimate film database experience</h2>
+        <h3>Discover, manage and enjoy cinema magic</h3>
+        <a href="/film/all" class="cta-button">Explore Film Library</a>
+    </div>
+
+    <script>
+        // Create floating background elements
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('floatingElements');
+            const colors = ['rgba(255,255,255,0.1)', 'rgba(255,255,255,0.07)', 'rgba(255,255,255,0.05)'];
+
+            for (let i = 0; i < 15; i++) {
+                const element = document.createElement('div');
+                element.classList.add('floating-element');
+
+                const size = Math.random() * 100 + 50;
+                const posX = Math.random() * window.innerWidth;
+                const delay = Math.random() * 5;
+                const duration = 10 + Math.random() * 20;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+
+                element.style.width = `${size}px`;
+                element.style.height = `${size}px`;
+                element.style.left = `${posX}px`;
+                element.style.bottom = `-${size}px`;
+                element.style.animationDelay = `${delay}s`;
+                element.style.animationDuration = `${duration}s`;
+                element.style.backgroundColor = color;
+
+                container.appendChild(element);
+            }
+        });
+    </script>
+</body>
+</html>

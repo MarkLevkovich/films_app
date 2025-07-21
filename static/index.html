@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML | Film Library</title>
+    <style>
+        :root {
+            --primary: #0984e3;
+            --secondary: #74b9ff;
+            --dark: #2d3436;
+            --light: #dfe6e9;
+            --accent: #00cec9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h2 {
+            font-weight: 300;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            z-index: 1;
+            animation: pulse 15s infinite linear;
+        }
+
+        .film-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .film-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .film-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .film-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .film-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .film-content {
+            padding: 1.5rem;
+        }
+
+        .film-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .film-author {
+            color: #636e72;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .film-author::before {
+            content: '🎬';
+            margin-right: 8px;
+        }
+
+        .edit-link {
+            display: block;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .edit-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 206, 201, 0.3);
+        }
+
+        .edit-button:hover {
+            background-color: #00b4b0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 206, 201, 0.4);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 0;
+            color: #636e72;
+        }
+
+        @keyframes pulse {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .film-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CineVerse Film Library</h1>
+        <h2>Your personal collection of cinematic treasures</h2>
+    </div>
+
+    <div class="film-container">
+        {% if films %}
+            <div class="film-grid">
+                {% for film in films %}
+                    <div class="film-card">
+                        <div class="film-content">
+                            <h3 class="film-title">{{ film.title }}</h3>
+                            <p class="film-author">{{ film.author }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h3>No films found in the library</h3>
+                <p>Start by adding your favorite films</p>
+            </div>
+        {% endif %}
+
+        <div class="edit-link">
+            <a href="/film/edit" class="edit-button">Manage Films</a>
+        </div>
+    </div>
+
+    <script>
+        // Add subtle animations to film cards on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.film-card');
+
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = `all 0.5s ease ${index * 0.1}s`;
+
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>
