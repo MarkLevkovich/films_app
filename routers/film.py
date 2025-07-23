@@ -1,6 +1,7 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, HTTPException, status, Request
+from fastapi import APIRouter, Depends, HTTPException, status, Request, Form
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.responses import RedirectResponse
 from starlette.templating import Jinja2Templates
 
 from db.db import get_db
@@ -34,14 +35,10 @@ async def edit_page(request: Request):
         }
     )
 
-@router.post('/create')
-async def create_category(db: Annotated[AsyncSession, Depends(get_db)], create_film: CreateFilm):
-    await db.execute(insert(Film).values(title=create_film.title,
-                                       author=create_film.author))
+@router.post('/add')
+async def add_film(db: Annotated[AsyncSession, Depends(get_db)], film_name: str = Form(...), film_author: str = Form(...)):
+    await db.execute(insert(Film).values(title=film_name, author=film_author))
     await db.commit()
-    return {
-        'status_code': status.HTTP_201_CREATED,
-        'transaction': 'Successful'
-    }
+    return RedirectResponse('/', status_code=303)
 
 
