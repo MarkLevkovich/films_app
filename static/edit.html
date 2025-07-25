@@ -2,28 +2,352 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Films List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Film Management</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --success: #00b894;
+            --danger: #d63031;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --gray: #dfe6e9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .header p {
+            color: #636e72;
+            font-size: 1.1rem;
+        }
+
+        .action-panels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel-title {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .panel-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #636e72;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a4bd6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(214, 48, 49, 0.3);
+        }
+
+        .film-list {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .film-list-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .film-list-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+
+        .film-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .film-table th, .film-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .film-table th {
+            color: #636e72;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .film-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .film-table tr:hover td {
+            background-color: rgba(108, 92, 231, 0.05);
+        }
+
+        .film-id {
+            color: #636e72;
+            font-weight: 500;
+        }
+
+        .empty-list {
+            text-align: center;
+            padding: 2rem;
+            color: #636e72;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .action-panels {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="add-film">
-        <form action="/film/add" method="post">
-            <input type="text" name="film_name" placeholder="What film?" required>
-            <input type="text" name="film_author" placeholder="What author?" required>
-            <button type="submit">Add</button>
-        </form>
+    <div class="container">
+        <div class="header">
+            <h1>Film Management</h1>
+            <p>Add, remove and manage your film collection</p>
+        </div>
+
+        <div class="action-panels">
+            <div class="panel">
+                <h2 class="panel-title">Add New Film</h2>
+                <form action="/film/add" method="post" id="addForm">
+                    <div class="form-group">
+                        <label for="film_name">Film Title</label>
+                        <input type="text" class="form-control" id="film_name" name="film_name" placeholder="Enter film title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="film_author">Director/Author</label>
+                        <input type="text" class="form-control" id="film_author" name="film_author" placeholder="Enter director or author" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Add Film</button>
+                </form>
+            </div>
+
+            <div class="panel">
+                <h2 class="panel-title">Remove Film</h2>
+                <form action="/film/del" method="post" id="delForm">
+                    <div class="form-group">
+                        <label for="film_id">Film ID</label>
+                        <input type="number" class="form-control" id="film_id" name="film_id" placeholder="Enter film ID to remove" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger btn-block">Remove Film</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="film-list">
+            <h2 class="film-list-title">Current Films</h2>
+            {% if films %}
+                <table class="film-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for film in films %}
+                            <tr>
+                                <td class="film-id">{{ film.id }}</td>
+                                <td>{{ film.title }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-list">
+                    <p>No films in the database yet. Add your first film!</p>
+                </div>
+            {% endif %}
+        </div>
     </div>
-    <div class="del-film">
-        <form action="/film/del" method="post">
-            <input type="number" name="film_id" placeholder="Enter film id" required>
-            <button type="submit">Del</button>
-        </form>
-    </div>
-    <div class="list-films">
-        <ul>
-            {% for film in films %}
-                <li>{{ film.id }} - {{ film.title }}</li>
-            {% endfor %}
-        </ul>
-    </div>
+
+    <script>
+        // Add form submission animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const addForm = document.getElementById('addForm');
+            const delForm = document.getElementById('delForm');
+
+            if (addForm) {
+                addForm.addEventListener('submit', (e) => {
+                    const btn = addForm.querySelector('button[type="submit"]');
+                    btn.disabled = true;
+                    btn.innerHTML = '<span class="spinner">Adding...</span>';
+                });
+            }
+
+            if (delForm) {
+                delForm.addEventListener('submit', (e) => {
+                    const btn = delForm.querySelector('button[type="submit"]');
+                    btn.disabled = true;
+                    btn.innerHTML = '<span class="spinner">Removing...</span>';
+
+                    // Simple confirmation for delete action
+                    const filmId = document.getElementById('film_id').value;
+                    if (!confirm(`Are you sure you want to delete film with ID ${filmId}?`)) {
+                        e.preventDefault();
+                        btn.disabled = false;
+                        btn.textContent = 'Remove Film';
+                    }
+                });
+            }
+
+            // Highlight film row when ID is entered in delete form
+            const filmIdInput = document.getElementById('film_id');
+            if (filmIdInput) {
+                filmIdInput.addEventListener('input', () => {
+                    const filmId = filmIdInput.value;
+                    const rows = document.querySelectorAll('.film-table tbody tr');
+
+                    rows.forEach(row => {
+                        row.style.backgroundColor = '';
+
+                        const rowId = row.querySelector('.film-id').textContent;
+                        if (rowId === filmId) {
+                            row.style.backgroundColor = 'rgba(214, 48, 49, 0.1)';
+                            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>
