@@ -12,5 +12,18 @@
             <button type="submit">Add</button>
         </form>
     </div>
+    <div class="del-film">
+        <form action="/film/del" method="post">
+            <input type="number" name="film_id" placeholder="Enter film id" required>
+            <button type="submit">Del</button>
+        </form>
+    </div>
+    <div class="list-films">
+        <ul>
+            {% for film in films %}
+                <li>{{ film.id }} - {{ film.title }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>

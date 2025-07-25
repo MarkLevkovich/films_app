@@ -27,11 +27,14 @@ async def get_all(db: Annotated[AsyncSession, Depends(get_db)], request: Request
 
 
 @router.get('/edit')
-async def edit_page(request: Request):
+async def edit_page(request: Request, db: Annotated[AsyncSession, Depends(get_db)]):
+    films = await db.execute(select(Film))
+    films_list = films.scalars().all()
     return templates.TemplateResponse(
         'edit.html',
         {
-            'request': request
+            'request': request,
+            'films': films_list
         }
     )
 
@@ -39,6 +42,12 @@ async def edit_page(request: Request):
 async def add_film(db: Annotated[AsyncSession, Depends(get_db)], film_name: str = Form(...), film_author: str = Form(...)):
     await db.execute(insert(Film).values(title=film_name, author=film_author))
     await db.commit()
-    return RedirectResponse('/', status_code=303)
+    return RedirectResponse('/film/all', status_code=303)
+
+@router.post('/del')
+async def del_film(db: Annotated[AsyncSession, Depends(get_db)], film_id: int = Form(...)):
+    await db.execute(delete(Film).where(Film.id==film_id))
+    await db.commit()
+    return RedirectResponse('/film/all', status_code=303)
 
 
