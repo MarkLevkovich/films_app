@@ -3,170 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML | Welcome</title>
+    <title>ML | FILMS</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&display=swap');
+
         :root {
-            --primary: #6c5ce7;
-            --secondary: #a29bfe;
-            --dark: #2d3436;
-            --light: #f5f6fa;
-            --accent: #fd79a8;
+            --ease: cubic-bezier(0.23, 1, 0.32, 1);
+            --timing: 0.6s;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            font-family: 'Montserrat', sans-serif;
+            background: #fff;
+            color: #000;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--light);
             overflow-x: hidden;
         }
 
-        .container {
-            text-align: center;
-            padding: 2rem;
-            max-width: 800px;
-            animation: fadeIn 1s ease-out;
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            background: linear-gradient(to right, #fff, #a29bfe);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        h2 {
-            font-size: 1.8rem;
-            font-weight: 300;
-            margin-bottom: 1.5rem;
-            opacity: 0.9;
-        }
-
-        h3 {
-            font-size: 1.3rem;
-            font-weight: 300;
-            margin-bottom: 2rem;
-            color: var(--accent);
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 15px 30px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             position: relative;
+            padding: 0 2rem;
+        }
+
+        .title {
+            font-size: 12vw;
+            font-weight: 800;
+            line-height: 0.85;
+            letter-spacing: -0.05em;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn var(--timing) var(--ease) forwards;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn var(--timing) var(--ease) 0.2s forwards;
+        }
+
+        .cta {
+            position: relative;
+            display: inline-block;
+            padding: 1.5rem 3rem;
+            border: 2px solid #000;
+            color: #000;
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn var(--timing) var(--ease) 0.4s forwards;
         }
 
-        .cta-button:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .cta-button::before {
+        .cta::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
+            background: #000;
+            transition: transform 0.8s var(--ease);
+            z-index: -1;
         }
 
-        .cta-button:hover::before {
-            left: 100%;
+        .cta:hover {
+            color: #fff;
         }
 
-        .floating-elements {
+        .cta:hover::before {
+            transform: translateX(100%);
+        }
+
+        .grid {
             position: absolute;
-            width: 100%;
-            height: 100%;
             top: 0;
             left: 0;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: repeat(12, 1fr);
+            pointer-events: none;
             z-index: -1;
-            overflow: hidden;
+            opacity: 0.03;
         }
 
-        .floating-element {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 50%;
-            animation: float 15s infinite linear;
+        .grid-line {
+            background: #000;
         }
 
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-1000px) rotate(720deg); }
+        .vertical {
+            grid-row: 1 / -1;
+            width: 1px;
+        }
+
+        .horizontal {
+            grid-column: 1 / -1;
+            height: 1px;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            h2 { font-size: 1.4rem; }
+            .title {
+                font-size: 15vw;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .cta {
+                padding: 1rem 2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="floating-elements" id="floatingElements"></div>
+    <div class="grid">
+        <!-- Vertical lines -->
+        <div class="grid-line vertical" style="grid-column: 1"></div>
+        <div class="grid-line vertical" style="grid-column: 2"></div>
+        <div class="grid-line vertical" style="grid-column: 3"></div>
+        <div class="grid-line vertical" style="grid-column: 4"></div>
+        <div class="grid-line vertical" style="grid-column: 5"></div>
+        <div class="grid-line vertical" style="grid-column: 6"></div>
+        <div class="grid-line vertical" style="grid-column: 7"></div>
+        <div class="grid-line vertical" style="grid-column: 8"></div>
+        <div class="grid-line vertical" style="grid-column: 9"></div>
+        <div class="grid-line vertical" style="grid-column: 10"></div>
+        <div class="grid-line vertical" style="grid-column: 11"></div>
+        <div class="grid-line vertical" style="grid-column: 12"></div>
 
-    <div class="container">
-        <h1>Welcome to ML Films</h1>
-        <h2>Your ultimate film database experience</h2>
-        <h3>Discover, manage and enjoy cinema magic</h3>
-        <a href="/film/all" class="cta-button">Explore Film Library</a>
+        <!-- Horizontal lines -->
+        <div class="grid-line horizontal" style="grid-row: 1"></div>
+        <div class="grid-line horizontal" style="grid-row: 2"></div>
+        <div class="grid-line horizontal" style="grid-row: 3"></div>
+        <div class="grid-line horizontal" style="grid-row: 4"></div>
+        <div class="grid-line horizontal" style="grid-row: 5"></div>
+        <div class="grid-line horizontal" style="grid-row: 6"></div>
+        <div class="grid-line horizontal" style="grid-row: 7"></div>
+        <div class="grid-line horizontal" style="grid-row: 8"></div>
+        <div class="grid-line horizontal" style="grid-row: 9"></div>
+        <div class="grid-line horizontal" style="grid-row: 10"></div>
+        <div class="grid-line horizontal" style="grid-row: 11"></div>
+        <div class="grid-line horizontal" style="grid-row: 12"></div>
     </div>
 
+    <main class="hero">
+        <h1 class="title">ML<br>FILMS</h1>
+        <p class="subtitle">The essence of cinema</p>
+        <a href="/film/all" class="cta">Enter Collection</a>
+    </main>
+
     <script>
-        // Create floating background elements
+        // Grid line animation
         document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('floatingElements');
-            const colors = ['rgba(255,255,255,0.1)', 'rgba(255,255,255,0.07)', 'rgba(255,255,255,0.05)'];
+            const lines = document.querySelectorAll('.grid-line');
 
-            for (let i = 0; i < 15; i++) {
-                const element = document.createElement('div');
-                element.classList.add('floating-element');
+            lines.forEach((line, index) => {
+                line.style.transform = 'scale(0)';
+                line.style.transformOrigin = index < 12 ? 'center top' : 'left center';
+                line.style.transition = `transform ${0.5 + index * 0.02}s var(--ease) ${0.1 + index * 0.02}s`;
 
-                const size = Math.random() * 100 + 50;
-                const posX = Math.random() * window.innerWidth;
-                const delay = Math.random() * 5;
-                const duration = 10 + Math.random() * 20;
-                const color = colors[Math.floor(Math.random() * colors.length)];
-
-                element.style.width = `${size}px`;
-                element.style.height = `${size}px`;
-                element.style.left = `${posX}px`;
-                element.style.bottom = `-${size}px`;
-                element.style.animationDelay = `${delay}s`;
-                element.style.animationDuration = `${duration}s`;
-                element.style.backgroundColor = color;
-
-                container.appendChild(element);
-            }
+                setTimeout(() => {
+                    line.style.transform = 'scale(1)';
+                }, 100);
+            });
         });
     </script>
 </body>
