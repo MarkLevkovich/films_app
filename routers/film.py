@@ -50,4 +50,10 @@ async def del_film(db: Annotated[AsyncSession, Depends(get_db)], film_id: int = 
     await db.commit()
     return RedirectResponse('/film/all', status_code=303)
 
+@router.post('/manage')
+async def manage_films(db: Annotated[AsyncSession, Depends(get_db)], film_id: int = Form(...), film_title: str = Form(...), film_author: str = Form(...)):
+    await db.execute(update(Film).where(Film.id==film_id).values(title=film_title, author=film_author))
+    await db.commit()
+    return RedirectResponse('/film/all', status_code=303)
+
 
